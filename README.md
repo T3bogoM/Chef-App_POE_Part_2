@@ -23,6 +23,6 @@ npm install @react-navigation/native @react-navigation/native-stack
 npx expo install react-native-screens react-native-safe-area-context
 
 gitHub link: 
-- 
+- https://github.com/T3bogoM/Chef-App_POE_Part_2.git
 youtube link:
 -
