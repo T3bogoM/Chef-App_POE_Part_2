@@ -1,10 +1,10 @@
-# Changelog - Chef App UI Updates
+Changelog - Chef App UI Updates
 
-## Part 2 to Part 3 Updates
+Part 2 to Part 3 Updates
 
 This document outlines all the user interface improvements and changes made to the Chef App based on feedback from Part 2.
 
-### Changes Based on Feedback
+Changes Based on Feedback
 
  1. Home Screen Improvements
 - Fixed Total Menu Items Display: Changed from hardcoded value to dynamic calculation using `getTotalMenuItems()` from MenuContext
