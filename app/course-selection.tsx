@@ -1,4 +1,3 @@
-/**Displays available courses for selection when adding a menu item */
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { router } from 'expo-router';
@@ -9,12 +8,6 @@ import { useMenu } from '@/context/MenuContext';
 export default function CourseSelectionScreen() {
   const { setSelectedCourse } = useCourseSelection();
   const { getMenuItemsByCourse } = useMenu();
-
-  /**
-   * Returns a color code based on the course type
-   * @param course - The course type (starter, main, dessert)
-   * @returns Hex color code for the course
-   */
   const getCourseColor = (course: string): string => {
     switch (course) {
       case 'starter':
@@ -28,10 +21,6 @@ export default function CourseSelectionScreen() {
     }
   };
 
-  /**
-   * Handles course selection and navigates back
-   * @param course - The selected course type
-   */
   const handleCourseSelect = (course: string) => {
     setSelectedCourse(course);
     router.back();

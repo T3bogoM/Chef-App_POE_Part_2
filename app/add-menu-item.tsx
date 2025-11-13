@@ -1,8 +1,3 @@
-/**
- * AddMenuItemScreen Component
- * Provides a form interface for adding new menu items
- * Includes validation, course selection, and form reset functionality
- */
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useMenu } from '@/context/MenuContext';
@@ -33,7 +28,7 @@ export default function AddMenuItemScreen() {
       return;
     }
 
-    // Validate price is a positive number
+    /* Validate price is a positive number*/
     const priceValue = parseFloat(price);
     if (isNaN(priceValue) || priceValue <= 0) {
       Alert.alert('Error', 'Please enter a valid price in Rand (greater than R0)');

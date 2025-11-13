@@ -1,8 +1,3 @@
-/**
- * CourseDetailsScreen Component
- * Displays all menu items for a specific course (filtered view)
- * Allows users to remove items from the menu with confirmation
- */
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useMenu } from '@/context/MenuContext';
@@ -15,11 +10,6 @@ export default function CourseDetailsScreen() {
   // Get filtered menu items for the selected course
   const items = course ? getMenuItemsByCourse(course) : [];
 
-  /**
-   * Returns a color code based on the course type
-   * @param courseType - The course type (starter, main, dessert)
-   * @returns Hex color code for the course
-   */
   const getCourseColor = (courseType: string): string => {
     switch (courseType) {
       case 'starter':
@@ -33,12 +23,6 @@ export default function CourseDetailsScreen() {
     }
   };
 
-  /**
-   * Handles the removal of a menu item with confirmation dialog
-   * Prevents accidental deletions by requiring user confirmation
-   * @param itemId - The unique identifier of the item to remove
-   * @param itemName - The name of the item for the confirmation message
-   */
   const handleRemoveItem = (itemId: string, itemName: string) => {
     Alert.alert(
       'Remove Item',

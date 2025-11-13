@@ -1,8 +1,3 @@
-/**
- * CoursesScreen Component
- * Displays all available courses with item counts
- * Allows navigation to course detail pages for filtering menu items
- */
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useMenu } from '@/context/MenuContext';
@@ -11,12 +6,6 @@ import { COURSES } from '@/types/MenuItem';
 
 export default function CoursesScreen() {
   const { getMenuItemsByCourse } = useMenu();
-
-  /**
-   * Returns a color code based on the course type
-   * @param course - The course type (starter, main, dessert)
-   * @returns Hex color code for the course
-   */
   const getCourseColor = (course: string): string => {
     switch (course) {
       case 'starter':
