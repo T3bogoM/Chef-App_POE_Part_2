@@ -1,12 +1,37 @@
+/**Displays available courses for selection when adding a menu item */
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { COURSES } from '@/types/MenuItem';
 import { useCourseSelection } from '@/context/CourseSelectionContext';
+import { useMenu } from '@/context/MenuContext';
 
 export default function CourseSelectionScreen() {
   const { setSelectedCourse } = useCourseSelection();
+  const { getMenuItemsByCourse } = useMenu();
 
+  /**
+   * Returns a color code based on the course type
+   * @param course - The course type (starter, main, dessert)
+   * @returns Hex color code for the course
+   */
+  const getCourseColor = (course: string): string => {
+    switch (course) {
+      case 'starter':
+        return '#ff6b6b'; // Coral red
+      case 'main':
+        return '#4ecdc4'; // Teal
+      case 'dessert':
+        return '#ffe66d'; // Yellow
+      default:
+        return '#ff6b6b';
+    }
+  };
+
+  /**
+   * Handles course selection and navigates back
+   * @param course - The selected course type
+   */
   const handleCourseSelect = (course: string) => {
     setSelectedCourse(course);
     router.back();
@@ -14,23 +39,31 @@ export default function CourseSelectionScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Courses Button */}
+      {/* Header */}
       <TouchableOpacity style={styles.coursesButton}>
-        <Text style={styles.buttonText}>Courses</Text>
+        <Text style={styles.buttonText}>Select Course</Text>
       </TouchableOpacity>
 
       {/* Course Options */}
-      <View style={styles.courseList}>
-        {COURSES.map((course) => (
-          <TouchableOpacity
-            key={course}
-            style={styles.courseButton}
-            onPress={() => handleCourseSelect(course)}
-          >
-            <Text style={styles.buttonText}>{course.charAt(0).toUpperCase() + course.slice(1)}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.courseList}>
+        {COURSES.map((course) => {
+          const items = getMenuItemsByCourse(course);
+          const courseColor = getCourseColor(course);
+          
+          return (
+            <TouchableOpacity
+              key={course}
+              style={[styles.courseButton, { borderLeftColor: courseColor }]}
+              onPress={() => handleCourseSelect(course)}
+            >
+              <Text style={styles.buttonText}>
+                {course.charAt(0).toUpperCase() + course.slice(1)}
+              </Text>
+              <Text style={styles.itemCount}>({items.length} items)</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 }
@@ -38,7 +71,7 @@ export default function CourseSelectionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#e8f4f8',
     paddingHorizontal: 20,
     paddingTop: 60,
   },
@@ -54,14 +87,18 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 6,
     borderWidth: 2,
     borderColor: '#ff6b6b',
   },
+  scrollContainer: {
+    flex: 1,
+  },
   courseList: {
     gap: 20,
+    paddingBottom: 20,
   },
   courseButton: {
     backgroundColor: '#fff',
@@ -74,10 +111,10 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-    borderLeftWidth: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    borderLeftWidth: 5,
     borderLeftColor: '#ff6b6b',
   },
   buttonText: {
@@ -85,5 +122,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#2c3e50',
     letterSpacing: 0.5,
+  },
+  itemCount: {
+    fontSize: 14,
+    color: '#6c757d',
+    marginTop: 5,
+    fontWeight: '500',
   },
 });

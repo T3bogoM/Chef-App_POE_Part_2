@@ -1,3 +1,8 @@
+/**
+ * AddMenuItemScreen Component
+ * Provides a form interface for adding new menu items
+ * Includes validation, course selection, and form reset functionality
+ */
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useMenu } from '@/context/MenuContext';
@@ -6,23 +11,42 @@ import { router } from 'expo-router';
 
 export default function AddMenuItemScreen() {
   const { addMenuItem } = useMenu();
-  const { selectedCourse, setSelectedCourse } = useCourseSelection();
+  const { selectedCourse, clearSelection } = useCourseSelection();
   const [dishName, setDishName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
 
+  /** Resets the form fields to empty values*/
+  const resetForm = () => {
+    setDishName('');
+    setDescription('');
+    setPrice('');
+    clearSelection();
+  };
+
+
+  /** Validates and saves the menu item*/
   const handleSave = () => {
+    // Validate all fields are filled
     if (!dishName.trim() || !description.trim() || !selectedCourse || !price.trim()) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
+    // Validate price is a positive number
     const priceValue = parseFloat(price);
     if (isNaN(priceValue) || priceValue <= 0) {
-      Alert.alert('Error', 'Please enter a valid price');
+      Alert.alert('Error', 'Please enter a valid price in Rand (greater than R0)');
       return;
     }
 
+    // Validate price has reasonable decimal places
+    if (priceValue > 5000) {
+      Alert.alert('Error', 'Price seems too high. Please enter a valid price in Rand.');
+      return;
+    }
+
+    // Add the menu item
     addMenuItem({
       dishName: dishName.trim(),
       description: description.trim(),
@@ -30,8 +54,15 @@ export default function AddMenuItemScreen() {
       price: priceValue,
     });
 
+    // Show success message and reset form
     Alert.alert('Success', 'Menu item added successfully!', [
-      { text: 'OK', onPress: () => router.back() }
+      { 
+        text: 'OK', 
+        onPress: () => {
+          resetForm();
+          router.back();
+        }
+      }
     ]);
   };
 
@@ -88,12 +119,12 @@ export default function AddMenuItemScreen() {
 
         {/* Price */}
         <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Price:</Text>
+          <Text style={styles.label}>Price (R):</Text>
           <TextInput
             style={styles.input}
             value={price}
             onChangeText={setPrice}
-            placeholder="Enter price"
+            placeholder="Enter price in Rand"
             placeholderTextColor="#999"
             keyboardType="numeric"
           />
@@ -111,7 +142,7 @@ export default function AddMenuItemScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#e8f4f8',
   },
   header: {
     flexDirection: 'row',

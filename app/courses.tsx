@@ -1,3 +1,8 @@
+/**
+ * CoursesScreen Component
+ * Displays all available courses with item counts
+ * Allows navigation to course detail pages for filtering menu items
+ */
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useMenu } from '@/context/MenuContext';
@@ -6,6 +11,24 @@ import { COURSES } from '@/types/MenuItem';
 
 export default function CoursesScreen() {
   const { getMenuItemsByCourse } = useMenu();
+
+  /**
+   * Returns a color code based on the course type
+   * @param course - The course type (starter, main, dessert)
+   * @returns Hex color code for the course
+   */
+  const getCourseColor = (course: string): string => {
+    switch (course) {
+      case 'starter':
+        return '#ff6b6b'; // Coral red
+      case 'main':
+        return '#4ecdc4'; // Teal
+      case 'dessert':
+        return '#ffe66d'; // Yellow
+      default:
+        return '#ff6b6b';
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -18,13 +41,17 @@ export default function CoursesScreen() {
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.courseList}>
         {COURSES.map((course) => {
           const items = getMenuItemsByCourse(course);
+          const courseColor = getCourseColor(course);
+          
           return (
             <TouchableOpacity
               key={course}
-              style={styles.courseButton}
+              style={[styles.courseButton, { borderLeftColor: courseColor }]}
               onPress={() => router.push(`/course-details/${course}`)}
             >
-              <Text style={styles.buttonText}>{course.charAt(0).toUpperCase() + course.slice(1)}</Text>
+              <Text style={styles.buttonText}>
+                {course.charAt(0).toUpperCase() + course.slice(1)}
+              </Text>
               <Text style={styles.itemCount}>({items.length} items)</Text>
             </TouchableOpacity>
           );
@@ -37,7 +64,7 @@ export default function CoursesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#e8f4f8',
     paddingHorizontal: 20,
     paddingTop: 60,
   },
@@ -53,7 +80,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 6,
     borderWidth: 2,
@@ -77,10 +104,10 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-    borderLeftWidth: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+    borderLeftWidth: 5,
     borderLeftColor: '#ff6b6b',
   },
   buttonText: {
